@@ -7,13 +7,16 @@ assets:
 docker:
   image: l3r8y/rultor-image:1.0.3
 release:
-  pre: false
-  sensetive:
-    - settings.xml
-  script: |-
-    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-    echo "before GRADLEEEEEEEEEEEEEE"
-    ./gradlew version -PnewVersion="${tag}"
-    echo "after GRAGLEEEEEEEEEEEE"
-    git commit -am "${tag}"
-    ./gradlew clean publish -x test --info
+#  pre: false
+#  sensetive:
+#    - settings.xml
+#  script: |-
+#    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+#    ./gradlew version -PnewVersion="${tag}"
+#    git commit -am "${tag}"
+#    ./gradlew clean publish -x test --info
+   script: |-
+     echo "Checking"
+     ls -lah
+     cat settings.xml
+     gpg --list-keys
