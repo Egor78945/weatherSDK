@@ -24,7 +24,6 @@ public class WeatherCacheService extends CacheService<CityWeatherDTO> {
         this.lock = lock;
         this.cacheCount = new AtomicInteger(0);
         this.cacheLimit = cacheLimit;
-
     }
 
     @Override

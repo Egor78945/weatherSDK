@@ -22,19 +22,21 @@ public class DefaultWeatherService implements WeatherService<CityWeatherDTO> {
     private final JsonMapper<CityWeatherDTO> cityWeatherJsonMapper;
     private final WeatherProperties weatherProperties;
     private final CacheService<CityWeatherDTO> cacheService;
+    private boolean executorIsEnabled;
 
     public DefaultWeatherService(JsonMapper<CityWeatherDTO> cityWeatherJsonMapper, WebClientService<CityWeatherDTO> webClientService, WeatherProperties weatherProperties, CacheService<CityWeatherDTO> cacheService) {
         this.cityWeatherJsonMapper = cityWeatherJsonMapper;
         this.webClientService = webClientService;
         this.weatherProperties = weatherProperties;
         this.cacheService = cacheService;
-        if (weatherProperties.getSdkMode().equals(SdkMode.POLLING)) {
-            new Thread(new SdkModeExecutor.PollingModeExecutor(cacheService, webClientService, weatherProperties)).start();
-        }
     }
 
     @Override
     public String getCityWeather(String city) throws IOException {
+        if (!executorIsEnabled) {
+            startModeExecutor();
+            executorIsEnabled = true;
+        }
         if (CityValidator.isValidCity(city)) {
             city = city.replace(" ", "%20").toLowerCase();
             CacheNode<CityWeatherDTO> cached = cacheService.get(city);
@@ -47,5 +49,11 @@ public class DefaultWeatherService implements WeatherService<CityWeatherDTO> {
             return cityWeatherJsonMapper.mapTo(cached.getPayload());
         }
         throw new RuntimeException("Invalid city format. City length must to be less or equal 50 and it must to contain only letters and spaces.");
+    }
+
+    private void startModeExecutor() {
+        if (weatherProperties.getSdkMode().equals(SdkMode.POLLING)) {
+            new Thread(new SdkModeExecutor.PollingModeExecutor(cacheService, webClientService, weatherProperties)).start();
+        }
     }
 }
