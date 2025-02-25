@@ -34,9 +34,6 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
 
-            artifact javadocJar
-            artifact sourcesJar
-
             pom {
                 name = 'io.github.egor78945:weatherSDK'
                 description = 'Library for access to weather in any city.'
@@ -67,10 +64,6 @@ publishing {
         maven {
             name = "OSSRH"
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username = findProperty("username") ?: System.getenv("username")
-                password = findProperty("password") ?: System.getenv("password")
-            }
         }
     }
 
