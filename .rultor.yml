@@ -12,6 +12,6 @@ release:
     - settings.xml
   script: |-
     [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
-    ./gradlew version -PnewVersion="${tag}"
+    mvn versions:set "-DnewVersion=${tag}"
     git commit -am "${tag}"
-    ./gradlew clean publish -x test --info
+    mvn clean deploy -Prelease --errors --settings ../settings.xml
