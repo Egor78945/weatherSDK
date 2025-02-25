@@ -1,9 +1,12 @@
 plugins {
     id 'java'
+    id 'maven-publish'
+    id 'signing'
 }
 
-group = 'org.example.weather'
+group = 'io.github.egor78945'
 version = '1.0-SNAPSHOT'
+archivesBaseName = 'weatherSDK'
 
 repositories {
     mavenCentral()
@@ -13,10 +16,66 @@ dependencies {
     implementation 'org.apache.httpcomponents.client5:httpclient5:5.4.2'
     implementation 'com.google.code.gson:gson:2.12.1'
     testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.mockito:mockito-core:5.10.0'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 test {
     useJUnitPlatform()
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact javadocJar
+            artifact sourcesJar
+
+            pom {
+                name = 'io.github.egor78945:weatherSDK'
+                description = 'Library for access to weather in any city.'
+                url = 'https://github.com/Egor78945/weatherSDK'
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'egorpetrov'
+                        name = 'Egor Petrov'
+                        email = 'egor78396@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/Egor78945/weatherSDK.git'
+                    developerConnection = 'scm:git:ssh://github.com/Egor78945/weatherSDK.git'
+                    url = 'https://github.com/Egor78945/weatherSDK.git'
+                }
+            }
+        }
+    }
+
+    repositories {
+        maven {
+            name = "OSSRH"
+            url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+        }
+    }
+
+    signing {
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
 }
