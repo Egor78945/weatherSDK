@@ -1,3 +1,5 @@
+architect:
+  - egor78945
 assets:
   settings.xml: egor78945/secrets#assets/settings.xml
   secring.gpg: egor78945/secrets#assets/secring.gpg
