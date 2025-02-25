@@ -67,6 +67,13 @@ public class WeatherProperties {
     }
 
     /**
+     * @return Maximum count of caching data.
+     */
+    public int getCACHE_LIMIT(){
+        return Integer.parseInt(PROPERTIES.getProperty("weather.cache.limit", "10"));
+    }
+
+    /**
      * @return Uri to {@code OpenWeatherMapAPI}
      */
     public String getBASE_URI() {

@@ -4,7 +4,8 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.example.weather.configuration.web.WebClientConfiguration;
-import org.example.weather.mapper.WeatherJsonMapper;
+import org.example.weather.mapper.CityWeatherJsonMapper;
+import org.example.weather.mapper.JsonMapper;
 import org.example.weather.model.dto.CityWeatherDTO;
 
 import java.io.IOException;
@@ -14,16 +15,16 @@ import java.io.IOException;
  */
 public class WeatherClientService implements WebClientService<CityWeatherDTO> {
     private final WebClientConfiguration webClientConfiguration;
-    private final WeatherJsonMapper weatherJsonMapper;
+    private final JsonMapper<CityWeatherDTO> cityWeatherJsonMapper;
 
     /**
      * Creates default {@link WeatherClientService}
      * @param webClientConfiguration Configuration fo web client.
-     * @param weatherJsonMapper Mapper for JSON responses.
+     * @param cityWeatherJsonMapper Mapper for JSON responses.
      */
-    public WeatherClientService(WebClientConfiguration webClientConfiguration, WeatherJsonMapper weatherJsonMapper) {
+    public WeatherClientService(WebClientConfiguration webClientConfiguration, JsonMapper<CityWeatherDTO> cityWeatherJsonMapper) {
         this.webClientConfiguration = webClientConfiguration;
-        this.weatherJsonMapper = weatherJsonMapper;
+        this.cityWeatherJsonMapper = cityWeatherJsonMapper;
     }
 
     @Override
@@ -32,7 +33,7 @@ public class WeatherClientService implements WebClientService<CityWeatherDTO> {
                 if(classicHttpResponse.getCode() != 200){
                     throw new HttpException(String.format("%s:%s", classicHttpResponse.getCode(), classicHttpResponse.getReasonPhrase()));
                 }
-                return weatherJsonMapper.mapTo(EntityUtils.toString(classicHttpResponse.getEntity()));
+                return cityWeatherJsonMapper.mapTo(EntityUtils.toString(classicHttpResponse.getEntity()));
             });
     }
 }

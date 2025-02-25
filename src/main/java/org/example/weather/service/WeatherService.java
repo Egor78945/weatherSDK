@@ -5,7 +5,7 @@ import java.io.IOException;
 /**
  * The main interface, performing the main business logic.
  */
-public interface WeatherService {
+public interface WeatherService<T> {
     /**
      * Returns information about weather in a city.
      * @param city City name.

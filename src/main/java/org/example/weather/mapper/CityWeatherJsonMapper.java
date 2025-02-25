@@ -6,15 +6,15 @@ import org.example.weather.mapper.gson.deserializer.CityWeatherDTODeserializer;
 import org.example.weather.model.dto.CityWeatherDTO;
 
 /**
- * Mapper for JSON responses from {@code OpenWeatherMapAPI}.
+ * Realization of {@link JsonMapper} for {@link CityWeatherDTO}.
  */
-public class WeatherJsonMapper {
+public class CityWeatherJsonMapper implements JsonMapper<CityWeatherDTO> {
     private final Gson gson;
 
     /**
      * Creates {@code WeatherJsonMapper} with {@code Gson} by custom deserializers.
      */
-    public WeatherJsonMapper() {
+    public CityWeatherJsonMapper() {
         this.gson = new GsonBuilder().
                 registerTypeAdapter(CityWeatherDTO.class, new CityWeatherDTODeserializer(new Gson()))
                 .create();
