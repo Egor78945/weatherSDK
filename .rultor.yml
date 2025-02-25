@@ -1,0 +1,13 @@
+assets:
+  settings.xml: egor78945/secrets#assets/settings.xml
+  secring.gpg: egor78945/secrets#assets/secring.gpg
+  pubring.gpg: egor78945/secrets#assets/pubring.gpg
+docker:
+  image: l3r8y/rultor-image:1.0.3
+release:
+  pre: false
+  script: |-
+    [[ "${tag}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || exit -1
+    ./gradlew version -PnewVersion="${tag}"
+    git commit -am "${tag}"
+    ./gradlew clean publish -x test --info
