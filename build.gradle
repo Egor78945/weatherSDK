@@ -69,4 +69,13 @@ publishing {
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
         }
     }
+
+    signing {
+        useGpgCmd()
+        sign publishing.publications.mavenJava
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+    }
 }
