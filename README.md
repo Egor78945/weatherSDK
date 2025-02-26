@@ -3,7 +3,7 @@
 This is a SDK, used for access to weather in any city. It allows you to use the built-in interface to get weather information in a city by city name. You can also create your own interface implementation to suit your requirements.
 ## Contents
 [Configuration](https://github.com/Egor78945/weatherSDK?tab=readme-ov-file#Configuration)  
-[Usage example](https://github.com/Egor78945/weatherSDK?tab=readme-ov-file#Usage example)
+[Usage example](https://github.com/Egor78945/weatherSDK?tab=readme-ov-file#Usage%20example)
 ## Configuration
 SDK configured using application.properties file. It has 5 properties, 4 optionally and 1 is mandatory.  
 ### Mandatory
