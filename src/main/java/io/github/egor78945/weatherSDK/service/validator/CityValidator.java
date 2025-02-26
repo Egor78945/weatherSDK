@@ -12,7 +12,6 @@ public class CityValidator {
     public static boolean isValidCity(String city) {
         return city != null && !city.isEmpty() && !city.isBlank() && city.length() <= 50 && isContainsOnlyLetters(city);
     }
-
     /**
      * Checks if city contains only letters and spaces.
      * @param city City name.

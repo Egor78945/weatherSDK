@@ -57,7 +57,6 @@ public class DefaultWeatherService implements WeatherService<CityWeatherDTO> {
         throw new RuntimeException("Invalid city format. City length must to be less or equal 50 and it must to contain only letters and spaces.");
     }
 
-
     /**
      * Starting new thread, which executes business logic of concrete {@link SdkMode}.
      */
