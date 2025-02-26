@@ -5,11 +5,28 @@ plugins {
 }
 
 group = 'io.github.egor78945'
-version = '1.0-SNAPSHOT'
+version = '1.0.0'
 archivesBaseName = 'weatherSDK'
 
 repositories {
     mavenCentral()
+}
+
+ext {
+    ossrhUsername = System.getenv('OSSRH_USERNAME')
+    ossrhPassword = System.getenv('OSSRH_PASSWORD')
+
+    signingKeyId = System.getenv('SIGNING_KEY_ID')
+    signingPassword = System.getenv('SIGNING_PASSWORD')
+    signingRingFile = System.getenv('SIGNING_SECRET_KEY')
+}
+
+println(ossrhUsername)
+println(signingRingFile)
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -18,11 +35,6 @@ dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
     testImplementation 'org.mockito:mockito-core:5.10.0'
-}
-
-java {
-    withJavadocJar()
-    withSourcesJar()
 }
 
 test {
@@ -35,26 +47,29 @@ publishing {
             from components.java
 
             pom {
-                name = 'io.github.egor78945:weatherSDK'
+                name = 'weatherSDK'
                 description = 'Library for access to weather in any city.'
-                url = 'https://github.com/Egor78945/weatherSDK'
+                url = 'https://github.com/weatherSDK'
+
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
+
                 developers {
                     developer {
-                        id = 'egorpetrov'
+                        id = 'egor78945'
                         name = 'Egor Petrov'
                         email = 'egor78396@gmail.com'
                     }
                 }
+
                 scm {
-                    connection = 'scm:git:git://github.com/Egor78945/weatherSDK.git'
-                    developerConnection = 'scm:git:ssh://github.com/Egor78945/weatherSDK.git'
-                    url = 'https://github.com/Egor78945/weatherSDK.git'
+                    connection = 'scm:git:https://github.com/weatherSDK.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:weatherSDK.git'
+                    url = 'https://github.com/Egor78945/weatherSDK'
                 }
             }
         }
@@ -62,17 +77,16 @@ publishing {
 
     repositories {
         maven {
-            name = "OSSRH"
+            name = "ossrh"
             url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = ossrhUsername
+                password = ossrhPassword
+            }
         }
     }
+}
 
-    signing {
-        useGpgCmd()
-        sign publishing.publications.mavenJava
-    }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.encoding = 'UTF-8'
-    }
+signing {
+    useInMemoryPgpKeys(signingKeyId, signingPassword, signingRingFile)
 }
