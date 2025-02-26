@@ -46,7 +46,7 @@ public class DefaultWeatherService implements WeatherService<CityWeatherDTO> {
         if (CityValidator.isValidCity(city)) {
             city = city.replace(" ", "%20").toLowerCase();
             CacheNode<CityWeatherDTO> cached = cacheService.get(city);
-            if (cached == null || cacheService.isExpired(city, weatherProperties.getEXPIRATION_LIMIT_IN_MINUTES())) {
+            if (cached == null || cacheService.isExpired(city, weatherProperties.getCACHE_EXPIRATION_LIMIT())) {
                 CityWeatherDTO cityWeatherDTO = webClientService.get(new HttpGet(String.format("%s?q=%s&appid=%s", weatherProperties.getBASE_URI(), city, weatherProperties.getAPI_KEY())));
                 WeatherCacheNode newNode = new WeatherCacheNode(cityWeatherDTO);
                 cacheService.put(city, newNode);
@@ -61,7 +61,7 @@ public class DefaultWeatherService implements WeatherService<CityWeatherDTO> {
      * Starting new thread, which executes business logic of concrete {@link SdkMode}.
      */
     private void startModeExecutor() {
-        if (weatherProperties.getSdkMode().equals(SdkMode.POLLING)) {
+        if (weatherProperties.getSDK_MODE().equals(SdkMode.POLLING)) {
             new Thread(new SdkModeExecutor.PollingModeExecutor(cacheService, webClientService, weatherProperties)).start();
         }
     }

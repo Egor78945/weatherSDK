@@ -36,7 +36,7 @@ public class SdkModeExecutor {
         public void run() {
             while (true) {
                 for (String k : cacheService.getCacheMap().keySet()) {
-                    if (cacheService.isExpired(k, weatherProperties.getEXPIRATION_LIMIT_IN_MINUTES())) {
+                    if (cacheService.isExpired(k, weatherProperties.getCACHE_EXPIRATION_LIMIT())) {
                         try {
                             CityWeatherDTO t = webClientService.get(new HttpGet(String.format("%s?q=%s&appid=%s", weatherProperties.getBASE_URI(), k, weatherProperties.getAPI_KEY())));
                             cacheService.put(k, new WeatherCacheNode(t));
@@ -46,7 +46,7 @@ public class SdkModeExecutor {
                     }
                 }
                 try {
-                    Thread.sleep((long) weatherProperties.getCACHE_UPDATE_IN_MINUTES() * 60 * 1000);
+                    Thread.sleep((long) weatherProperties.getCACHE_UPDATE_TIME() * 60 * 1000);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
